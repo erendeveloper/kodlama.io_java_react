@@ -4,15 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @Entity
 @Table(name="job_seekers")
 @AllArgsConstructor
 @NoArgsConstructor
+@Inheritance(strategy=InheritanceType.JOINED)
+@PrimaryKeyJoinColumn(name="job_seeker_id", referencedColumnName = "user_id")
 public class JobSeeker extends User{
 
     @Column(name="name")
