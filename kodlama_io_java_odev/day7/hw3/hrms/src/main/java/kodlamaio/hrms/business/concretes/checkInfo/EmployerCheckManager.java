@@ -94,7 +94,7 @@ public class EmployerCheckManager{
     public boolean checkEmailSaved(List<Employer> allEmployers){
         for(Employer employer : allEmployers){
             if(employer.getEmail().equals(this.employer.getEmail())){
-                message="Email is not a your commpany email";
+                message="Email is already used";
                 return true;
             }
         }

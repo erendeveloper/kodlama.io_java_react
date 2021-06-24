@@ -1,7 +1,9 @@
 package kodlamaio.hrms.business.concretes;
 
 import kodlamaio.hrms.business.abstracts.JobService;
+import kodlamaio.hrms.business.concretes.checkInfo.JobCheckManager;
 import kodlamaio.hrms.core.utilities.results.DataResult;
+import kodlamaio.hrms.core.utilities.results.ErrorDataResult;
 import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
 import kodlamaio.hrms.dataAccess.abstracts.JobDao;
@@ -31,13 +33,22 @@ public class JobManager implements JobService {
     */
     @Override
     public DataResult<List<Job>> getAll(){
-        return  new SuccessDataResult<List<Job>>(this.jobDao.findAll(),"Jobs data listelendi");
+        return  new SuccessDataResult<List<Job>>(this.jobDao.findAll(),"Jobs retrieved");
 
     }
 
     @Override
     public Result add(Job job) {
-        this.jobDao.save(job);
-        return new SuccessDataResult("Job added");
+
+        JobCheckManager jobCheckManager = new JobCheckManager(job);
+        if(!jobCheckManager.checkJobSaved(this.jobDao.findAll())){
+            this.jobDao.save(job);
+            return new SuccessDataResult("Job added");
+        }
+        else{
+            return  new ErrorDataResult(jobCheckManager.getMessage());
+        }
+
+
     }
 }
